@@ -9,3 +9,6 @@ it reaches the end after finding its target.
 <br>
 <br>
 <h1>New Statistic - Most visited node</h1>
+This new statistic that I added shows the node that has been visited the most in the path. While this doesn't matter 
+so much for other pathfinding algorithms like DFS and Djikstra, for random path, it shows which node the walk gets 
+"caught up on" the most, showing the area/node where the most time was spent in the path.
