@@ -4,6 +4,7 @@ import colors
 import config_data
 import global_game_data
 import graph_data
+from statistics import mode
 
 
 class Scoreboard:
@@ -108,9 +109,16 @@ class Scoreboard:
                 if player_object.player_config_data == player_configuration_info:
                     display_element.text = "Excess Distance Traveled: " + str(max(0, int(player_object.distance_traveled-self.distance_to_exit)))
 
+    def update_most_visited(self):
+        for index in range(len(config_data.player_data)):
+            # get mode of data
+            self.player_most_visited_display[index][0].text = self.wrap_text("Most Visited Node: " + str(mode(global_game_data.graph_paths[index])))
+
     def update_scoreboard(self):
         self.update_elements_locations()
         self.update_paths()
         self.update_distance_to_exit()
         self.update_distance_traveled()
+        # NEW
+        self.update_most_visited()
         
