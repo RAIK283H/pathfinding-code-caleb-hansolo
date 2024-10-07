@@ -16,7 +16,7 @@ def get_test_path():
 
 
 def get_random_path():
-    # graph = graph_data.graph_data[0]
+    assert graph_data is not None
     graph = graph_data.graph_data[global_game_data.current_graph_index]
     # start at start node (index 0)
     start = graph[0]
@@ -26,6 +26,7 @@ def get_random_path():
     end_ind = len(graph) - 1
     # target is target_node
     target = global_game_data.target_node[global_game_data.current_graph_index]
+    assert target is not None
 
     # path and current variables
     current = start
@@ -66,6 +67,8 @@ def get_random_path():
         print("  current_ind: " + str(current_ind) + "\n")
 
         # append current node to path
+        assert current is not None
+        assert current_ind is not None
         path.append(current_ind)
 
         # if target node found
@@ -77,6 +80,7 @@ def get_random_path():
             pathFound = True
 
     print("path: " + str(path) + "\n")
+    assert path is not None
     return path
 
 
