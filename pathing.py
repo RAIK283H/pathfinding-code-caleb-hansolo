@@ -20,16 +20,20 @@ def get_random_path():
     graph = graph_data.graph_data[global_game_data.current_graph_index]
     # start at start node (index 0)
     start = graph[0]
+    start_ind = 0
     # end node is last node (index len - 1)
     end = graph[len(graph) - 1]
+    end_ind = len(graph) - 1
     # target is target_node
     target = global_game_data.target_node[global_game_data.current_graph_index]
 
     # path and current variables
     current = start
+    current_ind = 0
     past = start
+    past_ind = 0
     path = []
-    path.append(start)
+    path.append(start_ind)
     
     # while path hasn't been found
     targetFound = False
@@ -37,28 +41,42 @@ def get_random_path():
     while not pathFound:
         # start from start, make random moves until at end, then check if target has been reached. If not, repeat process
 
-        # look at current's adjacency list, pick random node, then make that current node
+        # # look at current's adjacency list, pick random node, then make that current node
+        # random_index = random.randint(0, len(current[1]))
+        # # make a past variable so that current doesnt become the one it was just previously at
+        # real_past_ind = past_ind
+        # past = current
+        # past_ind = current_ind 
+        # current = graph[current[1][random_index]]
+        # current_ind = random_index
+        # print("current BEFORE alteration: " + str(current) + "\n")
+        # # make sure current isnt backtracking by one IF it has enough space to do so
+        # while current_ind != real_past_ind and len(current[1]) > 1:
+        #     # re-reandomize
+        #     print("   RANDOMIZING current: " + str(current) + "\n")
+        #     random_index = random.randint(0, len(past[1]))
+        #     current = graph[current[1][random_index]]
+        #     current_ind = random_index
+        # print("current AFTER alteration: " + str(current) + "\n")
         random_index = random.randint(0, len(current[1]))
-        # make a past variable so that current doesnt become the one it was just previously at
-        real_past = past
-        past = current 
-        current = graph[current[1][random_index]]
-        # make sure current isnt backtracking by one IF it has enough space to do so
-        while current != real_past and len(current[1]) > 1:
-            # re-reandomize
-            random_index = random.randint(0, len(past[1]))
-            current = graph[current[1][random_index]]
+        current_ind = int(current[1][random_index])
+        current = graph[current_ind]
+
+        print("current: " + str(current) + "\n")
+        print("  current_ind: " + str(current_ind) + "\n")
 
         # append current node to path
-        path.append(current)
+        path.append(current_ind)
 
         # if target node found
-        if current == target:
+        if current_ind == target:
             targetFound = True
 
-        if current == end and targetFound:
+        # if reached end and target has been found
+        if current_ind == end_ind and targetFound:
             pathFound = True
 
+    print("path: " + str(path) + "\n")
     return path
 
 
