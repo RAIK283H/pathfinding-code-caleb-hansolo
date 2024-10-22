@@ -88,10 +88,8 @@ def get_dfs_path():
     assert graph_data is not None
     graph = graph_data.graph_data[global_game_data.current_graph_index]
     # start at start node (index 0)
-    start = graph[0]
     start_ind = 0
     # end node is last node (index len - 1)
-    end = graph[len(graph) - 1]
     end_ind = len(graph) - 1
     # target is target_node (gives target node's index)
     target = global_game_data.target_node[global_game_data.current_graph_index]
@@ -143,11 +141,41 @@ def get_dfs_path():
     # add the path from target to end to the path array
     path = path + get_path_from_parents(target, end_ind, parents)
 
+    # ASSERTIONS:
+
+    # Postcondition: Result path includes the target node
+    assert target in path
+    # Postcondition: Result path ends at the exit node
+    assert path[len(path) - 1] == end_ind
+    # Postcondition: Every pair of sequential vertices in the path are connected by an edge
+    # just check that every node in path has a parent, meaning they are connected
+    for i in range(len(path) - 1):
+        assert path[i] in parents
+
+
     return path
 
 
 def get_bfs_path():
+    assert graph_data is not None
+    graph = graph_data.graph_data[global_game_data.current_graph_index]
+    # start at start node (index 0)
+    start_ind = 0
+    # end node is last node (index len - 1)
+    end_ind = len(graph) - 1
+    # target is target_node (gives target node's index)
+    target = global_game_data.target_node[global_game_data.current_graph_index]
+    assert target is not None
+
+    # path and current variables
+    path = [] # final path
+    parents = {} # dictionary of nodes as keys and their parent as values
+    visited = [] # list of nodes that have been visited
+    stack = []
+    stack.append(start_ind)
+
     
+
     return [1,2]
 
 
@@ -160,7 +188,7 @@ def get_path_from_parents(start, end, parents):
     path = []
     current = end
 
-    # while current node has a parent, put the parents down in path (this is in reverse order)
+    # while current node has a parent and isn't the start, put the parents down in path (this is in reverse order)
     while current in parents and current != start:
         path.append(current)
         current = parents[current]
