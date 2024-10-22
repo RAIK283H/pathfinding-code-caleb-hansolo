@@ -63,8 +63,8 @@ def get_random_path():
         current_ind = int(current[1][random_index])
         current = graph[current_ind]
 
-        print("current: " + str(current) + "\n")
-        print("  current_ind: " + str(current_ind) + "\n")
+        # print("current: " + str(current) + "\n")
+        # print("  current_ind: " + str(current_ind) + "\n")
 
         # append current node to path
         assert current is not None
@@ -79,7 +79,7 @@ def get_random_path():
         if current_ind == end_ind and targetFound:
             pathFound = True
 
-    print("path: " + str(path) + "\n")
+    # print("path: " + str(path) + "\n")
     assert path is not None
     return path
 
@@ -93,7 +93,7 @@ def get_dfs_path():
     # end node is last node (index len - 1)
     end = graph[len(graph) - 1]
     end_ind = len(graph) - 1
-    # target is target_node
+    # target is target_node (gives target node's index)
     target = global_game_data.target_node[global_game_data.current_graph_index]
     assert target is not None
 
@@ -107,6 +107,7 @@ def get_dfs_path():
     # while stack isn't empty and target has not been found
     while len(stack) != 0:
         current_ind = stack.pop()
+        assert current_ind is not None
         # if current node not yet visited
         if not current_ind in visited:
             # add current node to visited
@@ -116,17 +117,57 @@ def get_dfs_path():
                 # add node to stack if unvisited
                 if not neighbor in visited:
                     stack.append(neighbor)
-            path.append(current_ind)
+                    # add neighbor node to parents, and make current node's index its parent
+                    parents[neighbor] = current_ind
+                    print(parents)
             if current_ind == target:
                 break
-            
 
-    return [1,2]
+    # add the path from start to target to the path array
+    path = get_path_from_parents(start_ind, target, parents)
+
+    # DFS from target to the end
+    while len(stack) != 0:
+        current_ind = stack.pop()
+        assert current_ind is not None
+        if not current_ind in visited:
+            visited.append(current_ind)
+            for neighbor in graph[current_ind][1]:
+                if not neighbor in visited:
+                    stack.append(neighbor)
+                    parents[neighbor] = current_ind
+                    print(parents)
+            if current_ind == end_ind:
+                break
+
+    # add the path from target to end to the path array
+    path = path + get_path_from_parents(target, end_ind, parents)
+
+    return path
 
 
 def get_bfs_path():
+    
     return [1,2]
 
 
 def get_dijkstra_path():
     return [1,2]
+
+
+def get_path_from_parents(start, end, parents):
+    # creates path from start to end using dictionary of parent nodes
+    path = []
+    current = end
+
+    # while current node has a parent, put the parents down in path (this is in reverse order)
+    while current in parents and current != start:
+        path.append(current)
+        current = parents[current]
+
+    # reverse path
+    path.reverse()
+
+    print(path)
+
+    return path
