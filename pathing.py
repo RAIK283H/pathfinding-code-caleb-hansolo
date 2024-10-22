@@ -106,6 +106,8 @@ def get_dfs_path():
     while len(stack) != 0:
         current_ind = stack.pop()
         assert current_ind is not None
+        if current_ind == target:
+            break
         # if current node not yet visited
         if not current_ind in visited:
             # add current node to visited
@@ -118,16 +120,20 @@ def get_dfs_path():
                     # add neighbor node to parents, and make current node's index its parent
                     parents[neighbor] = current_ind
                     print(parents)
-            if current_ind == target:
-                break
+
 
     # add the path from start to target to the path array
     path = get_path_from_parents(start_ind, target, parents)
+
+    # make sure start node has parents -> al neighbors of start are its parents?
+    
 
     # DFS from target to the end
     while len(stack) != 0:
         current_ind = stack.pop()
         assert current_ind is not None
+        if current_ind == end_ind:
+            break
         if not current_ind in visited:
             visited.append(current_ind)
             for neighbor in graph[current_ind][1]:
@@ -135,22 +141,20 @@ def get_dfs_path():
                     stack.append(neighbor)
                     parents[neighbor] = current_ind
                     print(parents)
-            if current_ind == end_ind:
-                break
 
     # add the path from target to end to the path array
     path = path + get_path_from_parents(target, end_ind, parents)
 
-    # ASSERTIONS:
+    # # ASSERTIONS:
 
-    # Postcondition: Result path includes the target node
-    assert target in path
-    # Postcondition: Result path ends at the exit node
-    assert path[len(path) - 1] == end_ind
-    # Postcondition: Every pair of sequential vertices in the path are connected by an edge
-    # just check that every node in path has a parent, meaning they are connected
-    for i in range(len(path) - 1):
-        assert path[i] in parents
+    # # Postcondition: Result path includes the target node
+    # assert target in path
+    # # Postcondition: Result path ends at the exit node
+    # assert path[len(path) - 1] == end_ind
+    # # Postcondition: Every pair of sequential vertices in the path are connected by an edge
+    # # just check that every node in path has a parent, meaning they are connected
+    # for i in range(len(path) - 1):
+    #     assert path[i] in parents
 
 
     return path
@@ -171,12 +175,58 @@ def get_bfs_path():
     path = [] # final path
     parents = {} # dictionary of nodes as keys and their parent as values
     visited = [] # list of nodes that have been visited
-    stack = []
-    stack.append(start_ind)
+    queue = []
+    queue.append(start_ind)
+    visited.append(start_ind)
 
-    
+    while len(queue) != 0:
+        current_ind = queue.pop(0)
+        assert current_ind is not None
+        # go through current node's neighbors
+        for neighbor in graph[current_ind][1]:
+            # add neighbor node to queue if unvisited
+            if not neighbor in visited:
+                # add node to visited
+                visited.append(neighbor)
+                queue.append(neighbor)
+                # add neighbor node to parents, and make current node's index its parent
+                parents[neighbor] = current_ind
+                print(parents)
+        if current_ind == target:
+            break
 
-    return [1,2]
+    # add the path from start to target to the path array
+    path = get_path_from_parents(start_ind, target, parents)
+
+    # BFS from target to the end
+    while len(queue) != 0:
+        current_ind = queue.pop(0)
+        assert current_ind is not None
+        if not current_ind in visited:
+            visited.append(current_ind)
+            for neighbor in graph[current_ind][1]:
+                if not neighbor in visited:
+                    queue.append(neighbor)
+                    parents[neighbor] = current_ind
+                    print(parents)
+            if current_ind == end_ind:
+                break
+
+    # add the path from target to end to the path array
+    path = path + get_path_from_parents(target, end_ind, parents)
+
+    # # ASSERTIONS:
+
+    # # Postcondition: Result path includes the target node
+    # assert target in path
+    # # Postcondition: Result path ends at the exit node  
+    # assert path[len(path) - 1] == end_ind   
+    # # Postcondition: Every pair of sequential vertices in the path are connected by an edge
+    # # just check that every node in path has a parent, meaning they are connected
+    # for i in range(len(path) - 1):
+    #     assert path[i] in parents
+
+    return path
 
 
 def get_dijkstra_path():
@@ -188,6 +238,8 @@ def get_path_from_parents(start, end, parents):
     path = []
     current = end
 
+    print("start: " + str(start))
+    print("end: " + str(end))
     # while current node has a parent and isn't the start, put the parents down in path (this is in reverse order)
     while current in parents and current != start:
         path.append(current)

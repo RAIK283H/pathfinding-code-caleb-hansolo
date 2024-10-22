@@ -64,7 +64,7 @@ class Scoreboard:
 
     def update_elements_locations(self):
         self.distance_to_exit_label.x = config_data.window_width - self.stat_width
-        self.distance_to_exit_label.y = config_data.window_height - self.stat_height;
+        self.distance_to_exit_label.y = config_data.window_height - self.stat_height
         for index, (display_element, player) in enumerate(self.player_name_display):
             display_element.x = config_data.window_width - self.stat_width
             display_element.y = config_data.window_height - self.base_height_offset - self.stat_height * 2 - self.stat_height * (index * self.number_of_stats)
