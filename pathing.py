@@ -98,9 +98,11 @@ def get_dfs_path():
     # path and current variables
     path = [] # final path
     parents = {} # dictionary of nodes as keys and their parent as values
+    parents[start_ind] = -1
     visited = [] # list of nodes that have been visited
     stack = []
     stack.append(start_ind)
+    current_ind = 0
 
     # while stack isn't empty and target has not been found
     while len(stack) != 0:
@@ -125,8 +127,14 @@ def get_dfs_path():
     # add the path from start to target to the path array
     path = get_path_from_parents(start_ind, target, parents)
 
-    # make sure start node has parents -> al neighbors of start are its parents?
-    
+    stack = [target]
+    visited = [target]
+    parents = {}
+    parents[target] = -1
+
+
+    # make sure start node has parents -> all neighbors of start are its parents?
+    # parents = {current_ind: parents[current_ind]}
 
     # DFS from target to the end
     while len(stack) != 0:
@@ -134,13 +142,12 @@ def get_dfs_path():
         assert current_ind is not None
         if current_ind == end_ind:
             break
-        if not current_ind in visited:
-            visited.append(current_ind)
-            for neighbor in graph[current_ind][1]:
-                if not neighbor in visited:
-                    stack.append(neighbor)
-                    parents[neighbor] = current_ind
-                    print(parents)
+        for neighbor in graph[current_ind][1]:
+            if not neighbor in visited:
+                visited.append(neighbor)
+                stack.append(neighbor)
+                parents[neighbor] = current_ind
+                print(parents)
 
     # add the path from target to end to the path array
     path = path + get_path_from_parents(target, end_ind, parents)
@@ -241,10 +248,12 @@ def get_path_from_parents(start, end, parents):
     print("start: " + str(start))
     print("end: " + str(end))
     # while current node has a parent and isn't the start, put the parents down in path (this is in reverse order)
-    while current in parents and current != start:
+    while current in parents and current >= 0:
         path.append(current)
         current = parents[current]
 
+    # get rid of last (start) node, it is a repeat
+    path.pop()
     # reverse path
     path.reverse()
 
