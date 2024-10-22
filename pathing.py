@@ -85,6 +85,42 @@ def get_random_path():
 
 
 def get_dfs_path():
+    assert graph_data is not None
+    graph = graph_data.graph_data[global_game_data.current_graph_index]
+    # start at start node (index 0)
+    start = graph[0]
+    start_ind = 0
+    # end node is last node (index len - 1)
+    end = graph[len(graph) - 1]
+    end_ind = len(graph) - 1
+    # target is target_node
+    target = global_game_data.target_node[global_game_data.current_graph_index]
+    assert target is not None
+
+    # path and current variables
+    path = [] # final path
+    parents = {} # dictionary of nodes as keys and their parent as values
+    visited = [] # list of nodes that have been visited
+    stack = []
+    stack.append(start_ind)
+
+    # while stack isn't empty and target has not been found
+    while len(stack) != 0:
+        current_ind = stack.pop()
+        # if current node not yet visited
+        if not current_ind in visited:
+            # add current node to visited
+            visited.append(current_ind)
+            # add current node's neighbors to stack
+            for neighbor in graph[current_ind][1]:
+                # add node to stack if unvisited
+                if not neighbor in visited:
+                    stack.append(neighbor)
+            path.append(current_ind)
+            if current_ind == target:
+                break
+            
+
     return [1,2]
 
 

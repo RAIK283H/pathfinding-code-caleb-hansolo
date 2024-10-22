@@ -7,7 +7,7 @@ starting_graph_index = 0
 player_data = [
     ["Test", "1.png", colors.YELLOW],
     ["Random", "2.png", colors.ORANGE],
-#    ["DFS", "3.png", colors.PURPLE],
+    ["DFS", "3.png", colors.PURPLE],
 #    ["BFS", "4.png", colors.BLUE],
 #    ["Dijkstra", "5.png", colors.GREEN]
 ]
