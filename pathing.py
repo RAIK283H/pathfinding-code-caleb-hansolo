@@ -135,9 +135,6 @@ def get_dfs_path():
     parents = {}
     parents[target] = -1
 
-    # make sure start node has parents -> all neighbors of start are its parents?
-    # parents = {current_ind: parents[current_ind]}
-
     # DFS from target to the end
     while len(stack) != 0:
         current_ind = stack.pop()
@@ -184,14 +181,18 @@ def get_bfs_path():
     # path and current variables
     path = [] # final path
     parents = {} # dictionary of nodes as keys and their parent as values
+    parents[start_ind] = -1
     visited = [] # list of nodes that have been visited
     queue = []
     queue.append(start_ind)
     visited.append(start_ind)
+    current_ind = 0
 
     while len(queue) != 0:
         current_ind = queue.pop(0)
         assert current_ind is not None
+        if current_ind == target:
+            break
         # go through current node's neighbors
         for neighbor in graph[current_ind][1]:
             # add neighbor node to queue if unvisited
@@ -202,39 +203,46 @@ def get_bfs_path():
                 # add neighbor node to parents, and make current node's index its parent
                 parents[neighbor] = current_ind
                 print(parents)
-        if current_ind == target:
-            break
+
+    # for assertion making sure each consecutive node is connected by an edge
+    edge_parents = parents.copy()
 
     # add the path from start to target to the path array
     path = get_path_from_parents(start_ind, target, parents)
+
+    queue = [target]
+    visited = [target]
+    parents = {}
+    parents[target] = -1
 
     # BFS from target to the end
     while len(queue) != 0:
         current_ind = queue.pop(0)
         assert current_ind is not None
-        if not current_ind in visited:
-            visited.append(current_ind)
-            for neighbor in graph[current_ind][1]:
-                if not neighbor in visited:
-                    queue.append(neighbor)
-                    parents[neighbor] = current_ind
-                    print(parents)
-            if current_ind == end_ind:
-                break
+        # if end is reached, break
+        if current_ind == end_ind:
+            break
+        for neighbor in graph[current_ind][1]:
+            if not neighbor in visited:
+                queue.append(neighbor)
+                visited.append(current_ind)
+                parents[neighbor] = current_ind
+                edge_parents[neighbor] = current_ind
+                print(parents)
 
     # add the path from target to end to the path array
     path = path + get_path_from_parents(target, end_ind, parents)
 
-    # # ASSERTIONS:
+    # ASSERTIONS:
 
-    # # Postcondition: Result path includes the target node
-    # assert target in path
-    # # Postcondition: Result path ends at the exit node  
-    # assert path[len(path) - 1] == end_ind   
-    # # Postcondition: Every pair of sequential vertices in the path are connected by an edge
-    # # just check that every node in path has a parent, meaning they are connected
-    # for i in range(len(path) - 1):
-    #     assert path[i] in parents
+    # Postcondition: Result path includes the target node
+    assert target in path
+    # Postcondition: Result path ends at the exit node
+    assert path[len(path) - 1] == end_ind
+    # Postcondition: Every pair of sequential vertices in the path are connected by an edge
+    # just check that every node in path has a parent, meaning they are connected
+    for i in range(len(path) - 1):
+        assert path[i] in edge_parents
 
     return path
 
