@@ -24,6 +24,8 @@ class Scoreboard:
         self.font_size = 16
         self.distance_to_exit_label = pyglet.text.Label('Direct Distance To Exit : 0', x=0, y=0,
                                                         font_name='Arial', font_size=self.font_size, batch=batch, group=group)
+        self.player_winner_label = pyglet.text.Label('Direct Distance To Exit : 0', x=0, y=0,
+                                                        font_name='Arial', font_size=self.font_size, batch=batch, group=group)
         self.distance_to_exit = 0
         for index, player in enumerate(config_data.player_data):
             player_name_label = pyglet.text.Label(str(index + 1) + " " + player[0],
@@ -65,6 +67,9 @@ class Scoreboard:
     def update_elements_locations(self):
         self.distance_to_exit_label.x = config_data.window_width - self.stat_width
         self.distance_to_exit_label.y = config_data.window_height - self.stat_height
+        # NEW
+        self.player_winner_label.x = config_data.window_width - self.stat_width
+        self.player_winner_label.y = config_data.window_height - self.base_height_offset - self.stat_height
         for index, (display_element, player) in enumerate(self.player_name_display):
             display_element.x = config_data.window_width - self.stat_width
             display_element.y = config_data.window_height - self.base_height_offset - self.stat_height * 2 - self.stat_height * (index * self.number_of_stats)
@@ -114,6 +119,17 @@ class Scoreboard:
             # get mode of data
             self.player_most_visited_display[index][0].text = self.wrap_text("Most Visited Node: " + str(mode(global_game_data.graph_paths[index])))
 
+    def update_winner(self):
+        # whatever player traveled the least distance to get from the start to the target to the exit is the winner
+        winner_index = 0
+        winner_distance = 99999999
+        for index in range(len(config_data.player_data)):
+            if global_game_data.player_objects[index].distance_traveled < winner_distance:
+                winner_index = index
+                winner_distance = global_game_data.player_objects[index].distance_traveled
+        # will update winnner while the paths are being run in real time
+        self.player_winner_label.text = 'Winner : ' + str(global_game_data.player_objects[winner_index].player_config_data[0])
+
     def update_scoreboard(self):
         self.update_elements_locations()
         self.update_paths()
@@ -121,4 +137,5 @@ class Scoreboard:
         self.update_distance_traveled()
         # NEW
         self.update_most_visited()
+        self.update_winner()
         
