@@ -124,6 +124,9 @@ def get_dfs_path():
                     print(parents)
 
 
+    # for assertion making sure each consecutive node is connected by an edge
+    edge_parents = parents.copy()
+
     # add the path from start to target to the path array
     path = get_path_from_parents(start_ind, target, parents)
 
@@ -131,7 +134,6 @@ def get_dfs_path():
     visited = [target]
     parents = {}
     parents[target] = -1
-
 
     # make sure start node has parents -> all neighbors of start are its parents?
     # parents = {current_ind: parents[current_ind]}
@@ -147,21 +149,22 @@ def get_dfs_path():
                 visited.append(neighbor)
                 stack.append(neighbor)
                 parents[neighbor] = current_ind
+                edge_parents[neighbor] = current_ind
                 print(parents)
 
     # add the path from target to end to the path array
     path = path + get_path_from_parents(target, end_ind, parents)
 
-    # # ASSERTIONS:
+    # ASSERTIONS:
 
-    # # Postcondition: Result path includes the target node
-    # assert target in path
-    # # Postcondition: Result path ends at the exit node
-    # assert path[len(path) - 1] == end_ind
-    # # Postcondition: Every pair of sequential vertices in the path are connected by an edge
-    # # just check that every node in path has a parent, meaning they are connected
-    # for i in range(len(path) - 1):
-    #     assert path[i] in parents
+    # Postcondition: Result path includes the target node
+    assert target in path
+    # Postcondition: Result path ends at the exit node
+    assert path[len(path) - 1] == end_ind
+    # Postcondition: Every pair of sequential vertices in the path are connected by an edge
+    # just check that every node in path has a parent, meaning they are connected
+    for i in range(len(path) - 1):
+        assert path[i] in edge_parents
 
 
     return path
