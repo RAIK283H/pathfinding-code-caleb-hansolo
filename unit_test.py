@@ -3,6 +3,7 @@ import unittest
 import pathing
 import graph_data
 import global_game_data
+import permutation
 
 
 class TestPathFinding(unittest.TestCase):
@@ -47,6 +48,100 @@ class TestPathFinding(unittest.TestCase):
         path = pathing.get_bfs_path()
         # assert
         self.assertEqual(expected_path, path)
+
+
+    # SJT AND HAMILTONIAN CYCLE TESTS
+    def test_get_hamiltonian_cycles_with_no_cycle(self):
+        # set up
+        graph = graph_data.graph_data[11]
+        global_game_data.current_graph_index = 11
+        global_game_data.target_node = [1, 2]
+        expected_cycles = False
+        # test
+        cycles = permutation.get_hamiltonian_cycles(graph)
+        # assert
+        self.assertEqual(expected_cycles, cycles)
+
+    def test_get_hamiltonian_cycles_with_cycles(self):
+        # set up
+        graph = graph_data.graph_data[10]
+        global_game_data.current_graph_index = 10
+        global_game_data.target_node = [1, 2]
+        expected_cycles = [[1, 2, 3, 4],
+                            [4, 1, 2, 3],
+                            [1, 4, 3, 2],
+                            [3, 4, 1, 2],
+                            [4, 3, 2, 1],
+                            [3, 2, 1, 4],
+                            [2, 3, 4, 1],
+                            [2, 1, 4, 3]]
+        # test
+        cycles = permutation.get_hamiltonian_cycles(graph)
+        # assert
+        self.assertEqual(expected_cycles, cycles)
+
+    def test_get_hamiltonian_cycles_contains_a_single_cycle(self):
+        # set up
+        graph = graph_data.graph_data[9]
+        global_game_data.current_graph_index = 9
+        global_game_data.target_node = [1, 2]
+        expected_cycle = [6, 7, 3, 2, 1, 5, 4]
+        # test
+        cycles = permutation.get_hamiltonian_cycles(graph)
+        # assert
+        contains_cycle = cycles.__contains__(expected_cycle)
+        self.assertTrue(contains_cycle)
+
+    
+    def test_sjt(self):
+        # set up
+        set = [i for i in range(1, 4)]
+        expected_perms = [[1, 2, 3], [1, 3, 2], [3, 1, 2], [3, 2, 1], [2, 3, 1], [2, 1, 3]]
+        # test
+        perms = permutation.sjt(set)
+        # assert
+        self.assertEqual(expected_perms, perms)
+
+    def test_is_hamiltonian_cycle(self):
+        # set up
+        perm = [1, 2, 3, 4]
+        graph = graph_data.graph_data[10]
+        expected_result = True
+        # test
+        result = permutation.is_hamiltonian_cycle(perm, graph)
+        # assert
+        self.assertEqual(expected_result, result)
+
+    def test_get_mobile_int_ordered_permutation(self):
+        # set up
+        perm = [1, 2, 3, 4, 5]
+        directions = [True, True, False, False, True]
+        expected_result = 5
+        # test
+        result = permutation.get_mobile_int(perm, directions, len(perm))
+        # assert
+        self.assertEqual(expected_result, result)
+
+    
+    def test_get_mobile_int_unordered_permutation(self):
+        # set up
+        perm = [5, 4, 3, 2, 1]
+        directions = [True, True, False, False, True]
+        expected_result = 4
+        # test
+        result = permutation.get_mobile_int(perm, directions, len(perm))
+        # assert
+        self.assertEqual(expected_result, result)
+
+    def test_get_mobile_int_with_no_mobile_int(self):
+        # set up
+        perm = [2, 1, 3, 4, 5]
+        directions = [True, True, False, False, False]
+        expected_result = 0
+        # test
+        result = permutation.get_mobile_int(perm, directions, len(perm))
+        # assert
+        self.assertEqual(expected_result, result)
         
 
 

@@ -3,7 +3,7 @@ import permutation
 
 if __name__ == '__main__':
     # run code to calculate cycles
-    graph_index = 9
+    graph_index = 10
     curr_graph = graph_data.graph_data[graph_index]
     cycles = permutation.get_hamiltonian_cycles(curr_graph)
     
@@ -11,7 +11,9 @@ if __name__ == '__main__':
     print()
     if cycles == False:
         print("No cycles found")
+        print()
     else:
         print("Found " + str(len(cycles)) + " valid cycles: ")
         for cycle in cycles:
             print("   " + str(cycle))
+        print()

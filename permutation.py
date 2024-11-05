@@ -42,7 +42,10 @@ def sjt(set):
 
     # initialize current permutation
     current = set
-    perms.append(current)
+    new_perm = []
+    for i in range(n):
+        new_perm.append(current[i])
+    perms.append(new_perm)
 
     # implement Steinhaus–Johnson–Trotter algorithm
 
