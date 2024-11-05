@@ -21,7 +21,10 @@ def get_hamiltonian_cycles(graph):
             global_game_data.graph_paths.append(perm)
             cycles.append(perm)
     
-    return cycles
+    if len(cycles) == 0:
+        return False
+    else:
+        return cycles
 
 
 def sjt(set):
@@ -69,10 +72,10 @@ def sjt(set):
             if (current[i] > mobile_int):
                 directions[current[i] - 1] = not directions[current[i] - 1]
 
-        for i in range(n):  
-            print(current[i], end = " ")
+        # for i in range(n):  
+        #     print(current[i], end = " ")
 
-        print("")
+        # print("")
 
         # add current permutation to perms
         new_perm = []
@@ -112,13 +115,13 @@ def is_hamiltonian_cycle(perm, graph):
 
     # ensure that the first and last elements in the permutation are adjacent
     if (perm[0] not in graph[perm[len(perm) - 1]][1]):
-        print("FIRST AND LAST NOT NEIGHBORS: " + str(perm))
+        # print("FIRST AND LAST NOT NEIGHBORS: " + str(perm))
         return False
 
     # ensure that all adjacent elements in the permutation are adjacent in the graph
     for i in range(len(perm) - 1):
         if (perm[i + 1] not in graph[perm[i]][1]):
-            print("   NOT NEIGHBORS: " + str(perm))
+            # print("   NOT NEIGHBORS: " + str(perm))
             return False
 
     return True
