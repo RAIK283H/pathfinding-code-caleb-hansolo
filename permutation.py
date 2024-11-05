@@ -1,6 +1,7 @@
 import graph_data
 import global_game_data
 from numpy import random
+import math
 
 def get_hamiltonian_cycles(graph):
     assert graph is not None
@@ -16,7 +17,7 @@ def get_hamiltonian_cycles(graph):
 
     # test each permutation to see if it is a valid hamiltonian cycle
     for perm in perms:
-        if is_hamiltonian_cycle(perm):
+        if (is_hamiltonian_cycle(perm)):
             global_game_data.graph_paths.append(perm)
             cycles.append(perm)
     
@@ -36,11 +37,43 @@ def sjt(set):
     point_right = False
     directions = [point_left for i in range(n)]
 
+    # initialize current permutation
+    current = set
+    perms.append(current)
 
     # implement Steinhaus–Johnson–Trotter algorithm
-    
+
+    # will repreat n! times since thats how many perms there are
+    for i in range(1, math.factorial(n)):
+        # find next permutation
+        mobile_int = get_mobile_int(current, directions, n)
+        position = current.index(mobile_int)
+
 
     return perms
+
+
+def get_mobile_int(perm, directions, n):
+    # returns the next mobile integer in the permutation
+    # perm is a list of ints
+    assert perm is not None
+
+    prev = 0
+    curr = 0
+
+    for i in range(n):
+        # if the direction is True and i isnt first element, go left
+        if (directions[perm[i] - 1] == True and i != 0):
+            if (perm[i] > perm[i - 1] and perm[i] > prev):
+                curr = perm[i]
+                prev = curr
+        # if the direction is False and i isnt last element, go right
+        elif (directions[perm[i] - 1] == False and i != n - 1):
+            if (perm[i] > perm[i + 1] and perm[i] > prev):
+                curr = perm[i]
+                prev = curr
+    
+    return curr
 
 
 def is_hamiltonian_cycle(perms, graph):
