@@ -17,7 +17,7 @@ def get_hamiltonian_cycles(graph):
 
     # test each permutation to see if it is a valid hamiltonian cycle
     for perm in perms:
-        if (is_hamiltonian_cycle(perm)):
+        if (is_hamiltonian_cycle(perm, graph)):
             global_game_data.graph_paths.append(perm)
             cycles.append(perm)
     
@@ -46,8 +46,39 @@ def sjt(set):
     # will repreat n! times since thats how many perms there are
     for i in range(1, math.factorial(n)):
         # find next permutation
+
+        # first find largest mobile integer
         mobile_int = get_mobile_int(current, directions, n)
+        # find position of mobile integer in the per
         position = current.index(mobile_int)
+
+        # if mobile int points left, swap mobile and the int to the left of it
+        if (directions[current[position] - 1] == point_left):
+            temp = current[position]
+            current[position] = current[position - 1]
+            current[position - 1] = temp
+
+        # if mobile int points right, swap mobile and the int to the right of it
+        else:
+            temp = current[position]
+            current[position] = current[position + 1]
+            current[position + 1] = temp
+
+        # update direction of mobile integer
+        for i in range(n):
+            if (current[i] > mobile_int):
+                directions[current[i] - 1] = not directions[current[i] - 1]
+
+        for i in range(n):  
+            print(current[i], end = " ")
+
+        print("")
+
+        # add current permutation to perms
+        new_perm = []
+        for i in range(n):
+            new_perm.append(current[i])
+        perms.append(new_perm)
 
 
     return perms
@@ -76,16 +107,18 @@ def get_mobile_int(perm, directions, n):
     return curr
 
 
-def is_hamiltonian_cycle(perms, graph):
-    assert perms is not None
+def is_hamiltonian_cycle(perm, graph):
+    assert perm is not None
 
     # ensure that the first and last elements in the permutation are adjacent
-    if (perms[0] not in graph[perms[len(perms) - 1]][1]):
+    if (perm[0] not in graph[perm[len(perm) - 1]][1]):
+        print("FIRST AND LAST NOT NEIGHBORS: " + str(perm))
         return False
 
     # ensure that all adjacent elements in the permutation are adjacent in the graph
-    for i in range(len(perms) - 1):
-        if (perms[i + 1] not in graph[perms[i]][1]):
+    for i in range(len(perm) - 1):
+        if (perm[i + 1] not in graph[perm[i]][1]):
+            print("   NOT NEIGHBORS: " + str(perm))
             return False
 
     return True
