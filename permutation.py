@@ -43,8 +43,17 @@ def sjt(set):
     return perms
 
 
-def is_hamiltonian_cycle(perm, graph):
-    assert perm is not None
+def is_hamiltonian_cycle(perms, graph):
+    assert perms is not None
 
+    # ensure that the first and last elements in the permutation are adjacent
+    if (perms[0] not in graph[perms[len(perms) - 1]][1]):
+        return False
 
+    # ensure that all adjacent elements in the permutation are adjacent in the graph
+    for i in range(len(perms) - 1):
+        if (perms[i + 1] not in graph[perms[i]][1]):
+            return False
+
+    return True
 
