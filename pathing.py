@@ -1,7 +1,6 @@
 import graph_data
 import global_game_data
 from numpy import random
-import node
 import heapq as heap
 import math
 
@@ -287,16 +286,14 @@ def get_dijkstra_path():
         for neighbor in graph[current_ind][1]:
             # add neighbor node to queue if unvisited
             if not neighbor in visited:
-                # add cost to neighbor (distance from current node)
-                current_x = graph[current_ind][0][0]
-                current_y = graph[current_ind][0][1]
-                current_coords = [current_x, current_y]
-                print(" rah",current_coords)
+                # add cost to neighbor (distance from neighbor node to target node)
+                target_x = graph[target][0][0]
+                target_y = graph[target][0][1]
+                target_coords = [target_x, target_y]
                 neighbor_x = graph[neighbor][0][0]
                 neighbor_y = graph[neighbor][0][1]
                 neighbor_coords = [neighbor_x, neighbor_y]
-                print(neighbor_coords)
-                cost = math.dist(current_coords, neighbor_coords)
+                cost = math.dist(target_coords, neighbor_coords)
                 # add node to visited
                 visited.append(neighbor)
                 heap.heappush(frontier, (cost, neighbor))
@@ -329,14 +326,14 @@ def get_dijkstra_path():
 
         for neighbor in graph[current_ind][1]:
             if not neighbor in visited:
-                # add cost to neighbor (distance from current node)
-                current_x = graph[current_ind][0][1]
-                current_y = graph[current_ind][0][0]
-                current_coords = [current_x, current_y]
+                # add cost to neighbor (distance from neighbor node to exit node)
+                end_x = graph[end_ind][0][1]
+                end_y = graph[end_ind][0][0]
+                end_coords = [end_x, end_y]
                 neighbor_x = graph[neighbor][0][1]
                 neighbor_y = graph[neighbor][0][0]
                 neighbor_coords = [neighbor_x, neighbor_y]
-                cost = math.dist(current_coords, neighbor_coords)
+                cost = math.dist(end_coords, neighbor_coords)
                 # add node to visited
                 heap.heappush(frontier, (cost, neighbor))
                 visited.append(current_ind)
@@ -350,6 +347,12 @@ def get_dijkstra_path():
 
     # ASSERTIONS:
 
+    # Postconditions: The result path begins at the start node
+    is_neighbor_of_start_in_path = False
+    for neighbor in graph[start_ind][1]:
+        if neighbor == path[0]:
+            is_neighbor_of_start_in_path = True
+    assert is_neighbor_of_start_in_path
     # Postcondition: Result path includes the target node
     assert target in path
     # Postcondition: Result path ends at the exit node
