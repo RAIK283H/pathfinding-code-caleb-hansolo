@@ -145,13 +145,43 @@ class TestPathFinding(unittest.TestCase):
         
 
     # DJIKSTRA'S TESTS
-    def test_get_simple_djikstra_path(self):
+    def test_get_simple_dijkstra_path(self):
         # set up
         global_game_data.current_graph_index = 0
         global_game_data.target_node = [1, 2]
         expected_path = [1, 2]
         # test
-        path = pathing.get_bfs_path()
+        path = pathing.get_dijkstra_path()
+        # assert
+        self.assertEqual(expected_path, path)
+
+    def test_get_more_complex_dijkstra_path(self):
+        # set up 
+        global_game_data.current_graph_index = 2
+        global_game_data.target_node = [21, 21, 21]
+        expected_path = [21, 23]
+        # test
+        path = pathing.get_dijkstra_path()
+        # assert
+        self.assertEqual(expected_path, path)
+
+    def test_get_even_more_complex_dijkstra_path(self):
+        # set up 
+        global_game_data.current_graph_index = 7
+        global_game_data.target_node = [6, 6, 6, 6, 6, 6, 6, 6]
+        expected_path = [1, 3, 5, 6, 5, 9]
+        # test
+        path = pathing.get_dijkstra_path()
+        # assert
+        self.assertEqual(expected_path, path)
+
+    def test_get_dijkstra_path_with_confusing_path(self):
+        # set up 
+        global_game_data.current_graph_index = 12
+        global_game_data.target_node = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+        expected_path = [1, 4, 5, 1, 4, 6]
+        # test
+        path = pathing.get_dijkstra_path()
         # assert
         self.assertEqual(expected_path, path)
 

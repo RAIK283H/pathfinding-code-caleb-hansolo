@@ -6,8 +6,8 @@ import math
 
 def set_current_graph_paths():
     global_game_data.graph_paths.clear()
-    global_game_data.graph_paths.append(get_test_path())
-    global_game_data.graph_paths.append(get_random_path())
+    # global_game_data.graph_paths.append(get_test_path())
+    # global_game_data.graph_paths.append(get_random_path())
     global_game_data.graph_paths.append(get_dfs_path())
     global_game_data.graph_paths.append(get_bfs_path())
     global_game_data.graph_paths.append(get_dijkstra_path())
@@ -308,7 +308,7 @@ def get_dijkstra_path():
     # add the path from start to target to the path array
     path = get_path_from_parents(start_ind, target, parents)
 
-    frontier = [(0, target)]
+    frontier = [(current_dist, target)]
     heap.heapify(frontier)
     visited = [target]
     parents = {}
@@ -412,7 +412,7 @@ def get_a_star_path():
                 neighbor_coords = [neighbor_x, neighbor_y]
                 cost = current_dist + math.dist(current_coords, neighbor_coords)
                 # make heuristic - distance from neighbor node to target node
-                heuristic = get_heuristic(graph, current_ind, target)
+                heuristic = cost +get_heuristic(graph, current_ind, target)
                 
                 # add node to visited
                 visited.append(neighbor)
@@ -427,7 +427,7 @@ def get_a_star_path():
     # add the path from start to target to the path array
     path = get_path_from_parents(start_ind, target, parents)
 
-    frontier = [(0, target)]
+    frontier = [(current_dist, target)]
     heap.heapify(frontier)
     visited = [target]
     parents = {}
@@ -455,7 +455,7 @@ def get_a_star_path():
                 neighbor_coords = [neighbor_x, neighbor_y]
                 cost = current_dist + math.dist(current_coords, neighbor_coords)
                 # make heuristic - distance from neighbor node to target node
-                heuristic = get_heuristic(graph, current_ind, end_ind)
+                heuristic = cost + get_heuristic(graph, current_ind, end_ind)
 
                 # add node to visited
                 heap.heappush(frontier, (cost, neighbor))
