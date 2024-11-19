@@ -12,3 +12,7 @@ it reaches the end after finding its target.
 This new statistic that I added shows the node that has been visited the most in the path. While this doesn't matter 
 so much for other pathfinding algorithms like DFS and Djikstra, for random path, it shows which node the walk gets 
 "caught up on" the most, showing the area/node where the most time was spent in the path.
+<br>
+<br>
+<h1>Homework 6 - EXTRA CREDIT<h1>
+I am going for the A * algorithm implementation extra credit (5 points). I have added another function in pathing.py for A *.

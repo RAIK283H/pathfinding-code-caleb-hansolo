@@ -144,6 +144,16 @@ class TestPathFinding(unittest.TestCase):
         self.assertEqual(expected_result, result)
         
 
+    # DJIKSTRA'S TESTS
+    def test_get_simple_djikstra_path(self):
+        # set up
+        global_game_data.current_graph_index = 0
+        global_game_data.target_node = [1, 2]
+        expected_path = [1, 2]
+        # test
+        path = pathing.get_bfs_path()
+        # assert
+        self.assertEqual(expected_path, path)
 
 if __name__ == '__main__':
     unittest.main()
