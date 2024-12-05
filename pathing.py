@@ -3,6 +3,7 @@ import global_game_data
 from numpy import random
 import heapq as heap
 import math
+import f_w
 
 def set_current_graph_paths():
     global_game_data.graph_paths.clear()
@@ -12,6 +13,7 @@ def set_current_graph_paths():
     global_game_data.graph_paths.append(get_bfs_path())
     global_game_data.graph_paths.append(get_dijkstra_path())
     global_game_data.graph_paths.append(get_a_star_path())
+    global_game_data.graph_paths.append(f_w.floyd_warshall())
 
 
 def get_test_path():
