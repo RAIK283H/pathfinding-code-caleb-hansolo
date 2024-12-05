@@ -4,6 +4,7 @@ import pathing
 import graph_data
 import global_game_data
 import permutation
+import f_w
 
 
 class TestPathFinding(unittest.TestCase):
@@ -182,6 +183,38 @@ class TestPathFinding(unittest.TestCase):
         expected_path = [1, 4, 5, 1, 4, 6]
         # test
         path = pathing.get_dijkstra_path()
+        # assert
+        self.assertEqual(expected_path, path)
+
+    
+    # FLOYD WARSHALL UNIT TESTS
+    def test_get_floyd_warshall_simple_path(self):
+        # set up
+        global_game_data.current_graph_index = 0
+        global_game_data.target_node = [1, 2]
+        expected_path = [1, 2]
+        # test
+        path = f_w.floyd_warshall()
+        # assert
+        self.assertEqual(expected_path, path)
+
+    def test_get_floyd_warshall_complex_path(self):
+        # set up
+        global_game_data.current_graph_index = 2
+        global_game_data.target_node = [21, 21, 21]
+        expected_path = [17, 18, 23]
+        # test
+        path = f_w.floyd_warshall()
+        # assert
+        self.assertEqual(expected_path, path)
+
+    def test_get_floyd_warshall_complex_path_2(self):
+        # set up
+        global_game_data.current_graph_index = 5
+        global_game_data.target_node = [6, 6, 6, 6, 6, 6]
+        expected_path = [1, 2, 3, 6, 9, 15]
+        # test
+        path = f_w.floyd_warshall()
         # assert
         self.assertEqual(expected_path, path)
 
